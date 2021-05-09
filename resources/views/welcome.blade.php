@@ -15,8 +15,8 @@
         <div class="row justify-content-center">
 
             <p><a class=" text-dark nav-link active" aria-current="page"
-                  href="{{ url('/')}}"><img src="{{asset('assets/images/logo.png')}}" width="400" height="400"
-                                            class="d-inline-block align-right" style="margin-left: -80px"></a></p>
+                  href="{{ url('/')}}"><img src="{{asset('assets/images/logo.png')}}" width="400" height="400" class="d-inline-block align-right" style="margin-left: -80px"></a></p>
+
 
             <div class="col-md-6" style="margin-top: 50px; margin-right: -50px">
                 <div class="card">

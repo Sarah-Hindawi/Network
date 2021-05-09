@@ -39,7 +39,7 @@
                     <form action="/home">
                         @csrf
                         <input type="text" placeholder="Search..." name="search" size="30">
-                        <button onclick="location.href='/'" type="submit" style="margin-left: -4.5px; border: none; width:30px; height:30px">
+                        <button onclick="location.href='/'" type="submit" style="margin-left: -3px; border: none; width:30px; height:30px; border-radius: 5px; ">
                             <img src="{{asset('assets/images/search.png')}}" width="20" height="20" class="d-inline-block align-right">
                         </button>
 
