@@ -12,7 +12,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><p style="height: 10px; margin-left: 300px; font-size: large; font-weight: bold; color:#00508f;">{{ __('Create an Account') }}</p></div>
+                <div class="card-header"><p style="width: 6cm; height: 10px; margin-left: 300px; font-size: large; font-weight: bold; color:#00508f;">{{ __('Create an Account') }}</p></div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
@@ -57,14 +57,6 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
 

@@ -14,8 +14,7 @@
     <div class="container">
         <div class="row justify-content-center">
 
-            <p><a class=" text-dark nav-link active" aria-current="page"
-                  href="{{ url('/')}}"><img src="{{asset('assets/images/logo.png')}}" width="400" height="400" class="d-inline-block align-right" style="margin-left: -80px"></a></p>
+            <p><img src="{{asset('assets/images/logo.png')}}" width="400" height="400" class="d-inline-block align-right" style="margin-left: -80px"></p>
 
 
             <div class="col-md-6" style="margin-top: 50px; margin-right: -50px">
@@ -76,15 +75,6 @@
                                     @enderror
                                 </div>
                             </div>
-
-                            <div class="form-group row">
-                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                                </div>
-                            </div>
-
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">

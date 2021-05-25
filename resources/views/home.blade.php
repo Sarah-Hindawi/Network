@@ -10,7 +10,7 @@
             <form method="get" action="{{url('/')}}" enctype="multipart/form-data">
                 @csrf
                 <input type="image" name="imgbtn"
-                       style="width: 22px; height: 22px; margin-left: -25px; margin-top: 175px; background-color: white"
+                       style="width: 22px; height: 22px; margin-left: -25px; margin-top: 175px; background-color: white; border-radius: 3px;"
                        src="{{asset('assets/images/edit.png')}}">
             </form>
         </div>
@@ -32,7 +32,16 @@
                   style="margin-top: -1.55cm; margin-left: -180px">
                 @csrf
                 <button
-                    style="width: 80px; height: 25px; margin-left: 280px; background-color: dodgerblue; font-size: x-small; color: white"
+                    style="width: 80px; height: 27px; margin-left: 280px; background-color: dodgerblue; font-size: x-small; color: white; border-radius: 8px; position: relative; z-index: 2"
+                    type="submit"> Friends
+                </button>
+            </form>
+
+            <form method="get" action="{{url('/newpost/create')}}" enctype="multipart/form-data"
+                  style="margin-top: -0.8cm; margin-left: -180px">
+                @csrf
+                <button
+                    style="width: 80px; height: 27px; margin-left:450px; background-color: forestgreen; font-size: x-small; color: white; border-radius: 8px"
                     type="submit"> Add a Post
                 </button>
             </form>
@@ -87,7 +96,7 @@
                                 @csrf
                                 <input type="text" placeholder="Write a comment..." name="search" size="87">
                                 <input type="image" name="imgbtn"
-                                       style="width: 30px; height: 30px; background-color: royalblue; border-radius: 5px; margin-bottom: -10px"
+                                       style="width: 28px; height: 28px; background-color: royalblue; border-radius: 5px; margin-bottom: -9px"
                                        src="{{asset('assets/images/check.png')}}">
                             </form>
 

@@ -24,7 +24,8 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <a class=" text-dark nav-link active" aria-current="page"
+                       href="{{ url('/')}}"><img src="{{asset('assets/images/logo2.png')}}" width="120" height="23" class="d-inline-block align-right"></a>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -39,7 +40,7 @@
                     <form action="/home">
                         @csrf
                         <input type="text" placeholder="Search..." name="search" size="30">
-                        <button onclick="location.href='/'" type="submit" style="margin-left: -3px; border: none; width:30px; height:30px; border-radius: 5px; ">
+                        <button onclick="location.href='/'" type="submit" style="margin-left: -3px; margin-top: -15px; border: none; width:30px; height:30px; border-radius: 5px; ">
                             <img src="{{asset('assets/images/search.png')}}" width="20" height="20" class="d-inline-block align-right">
                         </button>
 
