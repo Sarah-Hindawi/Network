@@ -17,10 +17,10 @@ class CreateProfilesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('email');
-            $table->text('caption');
-            $table->string('image');
-            $table->string('location');
-            $table->text('comments');
+            $table->text('caption')->nullable();
+            $table->string('image')->nullable();
+            $table->string('location')->nullable();
+            $table->text('comments')->nullable();
         });
     }
 

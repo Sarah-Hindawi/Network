@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->text('friendRequests')->nullable();
             $table->boolean('private')->nullable();
             $table->string('password');
+            $table->string('image')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

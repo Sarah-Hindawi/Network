@@ -61,53 +61,65 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header" style="height: 50px;">
-                        <img src="{{asset('assets/images/avatar.png')}}" width="22" height="22"
-                             style="border-radius: 50%; margin-left: -10px; margin-right: 3px"> {{Auth::user()->name}}
+
+                @isset($data)
+
+                    @foreach($data as $p)
+
+                        <div class="card">
+                            <div class="card-header" style="height: 50px;">
+                                <img src="{{asset('assets/images/avatar.png')}}" width="22" height="22"
+                                     style="border-radius: 50%; margin-left: -10px; margin-right: 3px"> {{Auth::user()->name}}
+                                <br>
+                                <p style="height: 20px; text-align:center; margin-left:-14.85cm; font-size: xx-small">
+                                    {{$p['created_at']}}
+                                </p>
+
+                            </div>
+
+                            <div class="card-body">
+                                @isset($p['caption'])
+                                    {{$p['caption']}}
+                                @endisset
+
+                                <div style="margin-top:30px">
+                                    @isset($p['image'])
+                                        <img src="{{url('/images/'.$p['image'])}}" width="690" height="400">
+                                    @endisset
+                                </div>
+                            </div>
+                            <div class="card-header" style="height: fit-content;">
+                                <p style="font-weight: bold">Comments</p>
+                                <hr>
+                                @isset($p['comments'])
+
+                                    @foreach($p['comments'] as $comment)
+                                        <img src="{{asset('assets/images/avatar.png')}}" width="24" height="24"
+                                             style="border-radius: 50%; margin-top: .2cm"> {{$comment[0]}}
+                                        <p style="font-size: xx-small; margin-left: .75cm; margin-top: -.2cm"> {{$comment[2]}}</p>
+                                        <p style="height: fit-content; margin-left: 0.75cm; margin-top: -.4cm">{{$comment[1]}}</p>
+                                        <hr style="margin-top: -.3cm; margin-bottom: -1px">
+
+                                    @endforeach
+                                @endisset
+
+                                <form method="post" action="{{url('/comment')}}" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="text" placeholder="Write a comment..." name="text" size="87" required>
+                                    <input type="hidden" name="id" value="{{$p['id']}}">
+                                    <input type="image" name="imgbtn"
+                                           style="width: 28px; height: 28px; background-color: royalblue; border-radius: 5px; margin-bottom: -9px; margin-left: -0.3cm "
+                                           src="{{asset('assets/images/check.png')}}">
+                                </form>
+                            </div>
+                        </div>
                         <br>
-                        <p style="height: 20px; text-align:center; margin-left:-16.1cm; font-size: xx-small">
-                            {$time}}</p>
 
-                    </div>
-
-                    <div class="card-body">
-                        {{--                        @isset($text)--}}
-                        {$text}}
-                        {{--                        @endisset--}}
-
-                        <div style="margin-top:30px">
-                            {{--                        @isset($img)--}}
-                            <img src="{{asset('assets/images/avatar.png')}}" width="690" height="400">
-                            {{--                        @endisset--}}
-                        </div>
-                    </div>
-                        <div class="card-header" style="height: fit-content;">
-                            <p style="font-weight: bold">Comments</p><hr>
-                            <img src="{{asset('assets/images/avatar.png')}}" width="22" height="22"
-                                 style="border-radius: 50%;"> {{Auth::user()->name}}
-                            <br> <p style="height: fit-content; margin-left: 0.75cm">so cool!</p>
-
-                            <img src="{{asset('assets/images/avatar.png')}}" width="22" height="22"
-                                 style="border-radius: 50%;"> {{Auth::user()->name}}
-                            <br> <p style="height: fit-content; margin-left: 0.75cm">so cool!</p>
-
-                            <form method="get" action="{{url('/')}}" enctype="multipart/form-data">
-                                @csrf
-                                <input type="text" placeholder="Write a comment..." name="search" size="87">
-                                <input type="image" name="imgbtn"
-                                       style="width: 28px; height: 28px; background-color: royalblue; border-radius: 5px; margin-bottom: -9px"
-                                       src="{{asset('assets/images/check.png')}}">
-                            </form>
-
-                            {{--                            <button style="alignment: center; border-radius: 8px; width: 4cm; height: 1cm; margin-top: -11px; margin-left: 7cm">Write a Comment</button>--}}
-
-                        </div>
-
-                    </div>
-                </div>
+                    @endforeach
+                @endisset
             </div>
         </div>
+    </div>
     </div>
 
 @endsection
