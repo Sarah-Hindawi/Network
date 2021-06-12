@@ -8,7 +8,7 @@
                  style="margin-left: -800px; border: 3px solid;">
 
 
-            <form method="get" action="{{url('/')}}" enctype="multipart/form-data">
+            <form method="get" action="{{url('/profileimg')}}" enctype="multipart/form-data">
                 @csrf
                 <input type="image" name="imgbtn"
                        style="width: 22px; height: 22px; margin-left: -25px; margin-top: 175px; background-color: white; border-radius: 3px;"
@@ -69,10 +69,10 @@
 
                         <div class="card">
                             <div class="card-header" style="height: 50px;">
-                                <img src="{{url('/images/'. Auth::user()->image)}}" width="22" height="22"
+                                <img src="{{url('/images/'. Auth::user()->image)}}" width="29" height="29"
                                      style="border-radius: 50%; margin-left: -10px; margin-right: 3px"> {{Auth::user()->name}}
                                 <br>
-                                <p style="height: 20px; text-align:center; margin-left:-14.85cm; font-size: xx-small">
+                                <p style="height: 20px; text-align:center; margin-top: -5px; margin-left:-14.45cm; font-size: xx-small">
                                     {{$p['created_at']}}
                                 </p>
 
@@ -96,9 +96,9 @@
 
                                     @foreach($p['comments'] as $comment)
                                         <img src="{{url('/images/'. $comment[3])}}" width="24" height="24"
-                                             style="border-radius: 50%; margin-top: .2cm"> {{$comment[0]}}
-                                        <p style="font-size: xx-small; margin-left: .75cm; margin-top: -.2cm"> {{$comment[2]}}</p>
-                                        <p style="height: fit-content; margin-left: 0.75cm; margin-top: -.4cm">{{$comment[1]}}</p>
+                                             style="border-radius: 50%; margin-top: .2cm; margin-right: 5px"> {{$comment[0]}}
+                                        <p style="font-size: xx-small; margin-left: .9cm; margin-top: -.2cm"> {{$comment[2]}}</p>
+                                        <p style="height: fit-content; margin-left: 0.9cm; margin-top: -.4cm">{{$comment[1]}}</p>
                                         <hr style="margin-top: -.3cm; margin-bottom: -1px">
 
                                     @endforeach
@@ -106,7 +106,7 @@
 
                                 <form method="post" action="{{url('/comment')}}" enctype="multipart/form-data">
                                     @csrf
-                                    <input type="text" placeholder="Write a comment..." name="text" size="87" required>
+                                    <input type="text" placeholder="Write a comment..." name="text" size="89" required>
                                     <input type="hidden" name="id" value="{{$p['id']}}">
                                     <input type="hidden" name="commenterImg" value="{{Auth::user()->image}}">
                                     <input type="image" name="imgbtn"
