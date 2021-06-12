@@ -14,6 +14,8 @@ class ProfileController extends Controller
     {
         $email = Auth::user()->email;
 
+//        $userInfo = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->get()->toArray()), true);
+
         $posts = DB::table('profiles')->where('email', 'LIKE', "%" . $email . "%")->get()->toArray();
         //an array containing the info of each post
         $postArr = [];
@@ -26,7 +28,6 @@ class ProfileController extends Controller
 
                 $commentsArr = [];
                 foreach ($comments as $c) {
-                    $postComment = [];
                     $postComment = explode("||", $c);
                     $commenterName = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $postComment[0] . "%")->first("name")), true)['name'];
                     $postComment[0] = $commenterName;
@@ -50,7 +51,7 @@ class ProfileController extends Controller
         $comments = json_decode(json_encode($post), true)[0]['comments'];
 
         $date = new DateTime("now", new \DateTimeZone('America/Halifax'));
-        $content = $email . "||" . $_POST['text'] . "||" . $date->format('d-m-Y H-i-s');
+        $content = $email . "||" . $_POST['text'] . "||" . $date->format('d-m-Y H-i-s') . "||". $_POST['commenterImg'];
 
         //if there are no comments yet, add a comment of the email of the user and the text of the comment (separated by || for parsing)
         if (!isset($comments)) {

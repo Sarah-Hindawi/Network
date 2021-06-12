@@ -4,8 +4,9 @@
     <div class="container">
 
         <div class="row justify-content-center">
-            <img src="{{asset('assets/images/avatar.png')}}" width="200" height="200"
+            <img src="{{url('/images/'. Auth::user()->image)}}" width="200" height="200"
                  style="margin-left: -800px; border: 3px solid;">
+
 
             <form method="get" action="{{url('/')}}" enctype="multipart/form-data">
                 @csrf
@@ -68,7 +69,7 @@
 
                         <div class="card">
                             <div class="card-header" style="height: 50px;">
-                                <img src="{{asset('assets/images/avatar.png')}}" width="22" height="22"
+                                <img src="{{url('/images/'. Auth::user()->image)}}" width="22" height="22"
                                      style="border-radius: 50%; margin-left: -10px; margin-right: 3px"> {{Auth::user()->name}}
                                 <br>
                                 <p style="height: 20px; text-align:center; margin-left:-14.85cm; font-size: xx-small">
@@ -94,7 +95,7 @@
                                 @isset($p['comments'])
 
                                     @foreach($p['comments'] as $comment)
-                                        <img src="{{asset('assets/images/avatar.png')}}" width="24" height="24"
+                                        <img src="{{url('/images/'. $comment[3])}}" width="24" height="24"
                                              style="border-radius: 50%; margin-top: .2cm"> {{$comment[0]}}
                                         <p style="font-size: xx-small; margin-left: .75cm; margin-top: -.2cm"> {{$comment[2]}}</p>
                                         <p style="height: fit-content; margin-left: 0.75cm; margin-top: -.4cm">{{$comment[1]}}</p>
@@ -107,6 +108,7 @@
                                     @csrf
                                     <input type="text" placeholder="Write a comment..." name="text" size="87" required>
                                     <input type="hidden" name="id" value="{{$p['id']}}">
+                                    <input type="hidden" name="commenterImg" value="{{Auth::user()->image}}">
                                     <input type="image" name="imgbtn"
                                            style="width: 28px; height: 28px; background-color: royalblue; border-radius: 5px; margin-bottom: -9px; margin-left: -0.3cm "
                                            src="{{asset('assets/images/check.png')}}">
