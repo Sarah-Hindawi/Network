@@ -2,20 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use \Datetime;
 
-class ProfileController extends Controller
+
+class OthersProfileController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function create()
     {
-        $email = Auth::user()->email;
 
-        $posts = DB::table('profiles')->where('email', 'LIKE', "%" . $email . "%")->orderBy('created_at', 'desc')->get()->toArray();
-        //an array containing the info of each post
+        $requestedEmail = json_decode(json_encode(DB::table('users')->where('id', 'LIKE', "%" . request()->id . "%")->get()->toArray()), true)[0]['email'];
+
+        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . Auth::user()->email . "%")->get()->toArray()), true)[0]['friends'];
+
+        $userFriends = explode("||", $userFriends);
+
+        $isFriend = in_array($requestedEmail, $userFriends);
+
+        $userInfo = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $requestedEmail . "%")->get()->toArray()), true);
+
+        $isPrivate = $userInfo[0]['private'];
+
+        if ($isPrivate) {
+            return view('othersProfile', ["info" => $userInfo[0], "isFriend" => $isFriend, "private" => true]);
+
+        }
+
+        $posts = DB::table('profiles')->where('email', 'LIKE', "%" . $requestedEmail . "%")->orderBy('created_at', 'desc')->get()->toArray();
+
         $postArr = [];
 
         for ($i = 0; $i < sizeof($posts); $i++) {
@@ -31,9 +53,7 @@ class ProfileController extends Controller
 
                     $profileImage = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $postComment[0] . "%")->first("image")), true)['image'];
 
-                    //replacing the email with the user name
                     $postComment[0] = $commenterName;
-
                     $postComment[3] = $profileImage;
                     $commentsArr[] = $postComment;
                 }
@@ -41,12 +61,13 @@ class ProfileController extends Controller
             }
         }
 
-        return view('home', ["data" => $postArr]);
+        return view('othersProfile', ["data" => $postArr, "info" => $userInfo[0], "isFriend" => $isFriend]);
     }
 
     public function addComment()
     {
         $email = Auth::user()->email;
+        $requestedEmail = $_POST['accountEmail'];
 
         $post = DB::table('profiles')->where('id', 'LIKE', "%" . $_POST['id'] . "%")->get();
 
@@ -65,7 +86,9 @@ class ProfileController extends Controller
 
         DB::table('profiles')->where('id', 'LIKE', "%" . $_POST['id'] . "%")->update(array('comments' => $comments));
 
+        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $requestedEmail . "%")->get()->toArray()), true)[0]['id'];
 
-        return redirect('/home');
+
+        return redirect('/profile?id='. $userId);
     }
 }

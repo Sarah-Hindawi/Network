@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->text('about')->nullable();
             $table->text('friends')->nullable();
             $table->text('friendRequests')->nullable();
-            $table->boolean('private')->nullable();
+            $table->boolean('private')->default(false);
             $table->string('password');
             $table->string('image')->default('avatar.png');
             $table->rememberToken();

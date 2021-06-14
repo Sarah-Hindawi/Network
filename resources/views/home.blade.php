@@ -29,7 +29,7 @@
         </div>
 
         <div class="text-center h4" style="margin-top: .7cm; margin-left: -40px">
-            <form method="get" action="{{url('/')}}" enctype="multipart/form-data"
+            <form method="get" action="{{url('/friends')}}" enctype="multipart/form-data"
                   style="margin-top: -1.55cm; margin-left: -180px">
                 @csrf
                 <button
@@ -93,7 +93,6 @@
                                 <p style="font-weight: bold">Comments</p>
                                 <hr>
                                 @isset($p['comments'])
-
                                     @foreach($p['comments'] as $comment)
                                         <img src="{{url('/images/'. $comment[3])}}" width="24" height="24"
                                              style="border-radius: 50%; margin-top: .2cm; margin-right: 5px"> {{$comment[0]}}
