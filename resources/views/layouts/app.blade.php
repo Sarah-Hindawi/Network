@@ -37,13 +37,20 @@
 
                     </ul>
 
-                    <form action="/home">
+
+                    <form method="post" action="{{url('/search')}}" enctype="multipart/form-data">
                         @csrf
                         <input type="text" placeholder="Search..." name="search" size="30">
-                        <button onclick="location.href='/'" type="submit" style="margin-left: -3px; margin-top: -15px; border: none; width:30px; height:30px; border-radius: 5px; ">
+                        <button onclick="location.href='/search'" type="submit" style="margin-left: -3px; margin-top: -15px; border: none; width:30px; height:30px; border-radius: 5px; ">
                             <img src="{{asset('assets/images/search.png')}}" width="20" height="20" class="d-inline-block align-right">
                         </button>
 
+                    </form>
+
+                    <form method="get" action="{{url('/requests')}}">
+                        @csrf
+                        <input type="image" name="imgbtn" style="margin-left:240px; margin-right: -520px; width: 30px; height: 30px"
+                               src="{{asset('assets/images/requests.png')}}"  alt="Tool Tip">
                     </form>
 
                     <!-- Right Side Of Navbar -->

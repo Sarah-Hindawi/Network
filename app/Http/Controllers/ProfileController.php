@@ -20,7 +20,7 @@ class ProfileController extends Controller
     {
         $email = Auth::user()->email;
 
-        $posts = DB::table('profiles')->where('email', 'LIKE', "%" . $email . "%")->orderBy('created_at', 'desc')->get()->toArray();
+        $posts = DB::table('profiles')->where('email', 'LIKE', $email)->orderBy('created_at', 'desc')->get()->toArray();
         //an array containing the info of each post
         $postArr = [];
 
@@ -33,9 +33,9 @@ class ProfileController extends Controller
                 $commentsArr = [];
                 foreach ($comments as $c) {
                     $postComment = explode("||", $c);
-                    $commenterName = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $postComment[0] . "%")->first("name")), true)['name'];
+                    $commenterName = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $postComment[0])->first("name")), true)['name'];
 
-                    $profileImage = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $postComment[0] . "%")->first("image")), true)['image'];
+                    $profileImage = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $postComment[0])->first("image")), true)['image'];
 
                     //replacing the email with the user name
                     $postComment[0] = $commenterName;
@@ -54,7 +54,7 @@ class ProfileController extends Controller
     {
         $email = Auth::user()->email;
 
-        $post = DB::table('profiles')->where('id', 'LIKE', "%" . $_POST['id'] . "%")->get();
+        $post = DB::table('profiles')->where('id', 'LIKE', $_POST['id'])->get();
 
         $comments = json_decode(json_encode($post), true)[0]['comments'];
 
@@ -69,7 +69,7 @@ class ProfileController extends Controller
             $comments = $comments . "|||" . $content;
         }
 
-        DB::table('profiles')->where('id', 'LIKE', "%" . $_POST['id'] . "%")->update(array('comments' => $comments));
+        DB::table('profiles')->where('id', 'LIKE', $_POST['id'])->update(array('comments' => $comments));
 
 
         return redirect('/home');

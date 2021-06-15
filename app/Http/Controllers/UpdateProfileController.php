@@ -29,7 +29,7 @@ class UpdateProfileController extends Controller
         $request->image->move(public_path('images'), $imageName);
 
 
-        DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->update(array('image' => $imageName));
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('image' => $imageName));
 
         return view('home');
     }
@@ -38,7 +38,7 @@ class UpdateProfileController extends Controller
 
         $email = Auth::user()->email;
 
-        DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->update(array('about' => $_POST['about']));
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('about' => $_POST['about']));
 
         return view('home');
     }
@@ -46,14 +46,14 @@ class UpdateProfileController extends Controller
     public function updatePrivacy(){
 
         $email = Auth::user()->email;
-        DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->update(array('private' => $_POST['privacy']));
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('private' => $_POST['privacy']));
         return view('home');
     }
 
     public function updateUserName(){
 
         $email = Auth::user()->email;
-        DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->update(array('name' => $_POST['name']));
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('name' => $_POST['name']));
         return view('home');
     }
 

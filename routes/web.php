@@ -30,7 +30,9 @@ Route::post('/profileimg', [App\Http\Controllers\UpdateProfileController::class,
 Route::get('/friends', [App\Http\Controllers\FriendsController::class, 'create']);
 Route::post('/addFriend', [App\Http\Controllers\FriendsController::class, 'addFriend']);
 Route::post('/removeFriend', [App\Http\Controllers\FriendsController::class, 'removeFriend']);
+Route::get ('/requests', [App\Http\Controllers\FriendsController::class, 'displayFriendRequests']);
 
 
 Route::get('/profile', [App\Http\Controllers\OthersProfileController::class, 'create']);
 Route::post('/addcomment', [App\Http\Controllers\OthersProfileController::class, 'addComment']);
+Route::post('/search', [App\Http\Controllers\OthersProfileController::class, 'search']);

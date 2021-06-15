@@ -12,7 +12,7 @@ class FriendsController extends Controller
     {
         $email = Auth::user()->email;
 
-        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->get()->toArray()), true)[0]['friends'];
+        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friends'];
         $userFriends = explode("||", $userFriends);
 
         return view('friends', ['friends' => $userFriends]);
@@ -20,23 +20,21 @@ class FriendsController extends Controller
 
     public function addFriend()
     {
-
         $email = Auth::user()->email;
         $friendEmail = $_POST['email'];
 
-        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->get()->toArray()), true)[0]['friendRequests'];
+        $friendReqs = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['friendRequests'];
 
-        if (is_null($userFriends)) {
-            $userFriends = $friendEmail;
+        if (is_null($friendReqs)) {
+            $friendReqs = $email;
 
         } else {
-
-            $userFriends .= "||" . $friendEmail;
+            $friendReqs .= "||" . $email;
         }
 
-        DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->update(array('friendRequests' => $userFriends));
+        DB::table('users')->where('email', 'LIKE', $friendEmail)->update(array('friendRequests' => $friendReqs));
 
-        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $friendEmail . "%")->get()->toArray()), true)[0]['id'];
+        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['id'];
 
         return redirect('/profile?id=' . $userId);
     }
@@ -46,7 +44,7 @@ class FriendsController extends Controller
         $email = Auth::user()->email;
         $friendEmail = $_POST['email'];
 
-        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->get()->toArray()), true)[0]['friends'];
+        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friends'];
         $userFriends = explode("||", $userFriends);
 
         //remove the email address of the removed user from the list of friends
@@ -54,9 +52,9 @@ class FriendsController extends Controller
 
         $userFriends = implode("||", $userFriends);
 
-        DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->update(array('friends' => $userFriends));
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('friends' => $userFriends));
 
-        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $friendEmail . "%")->get()->toArray()), true)[0]['id'];
+        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['id'];
 
         return redirect('/profile?id=' . $userId);
     }
@@ -65,17 +63,67 @@ class FriendsController extends Controller
     {
         $email = Auth::user()->email;
 
-        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $email . "%")->get()->toArray()), true)[0]['friendRequests'];
-        $userFriends = explode("||", $userFriends);
+        $users = json_decode(json_encode(DB::table('users')->where('email', 'LIKE',$email)->get()->toArray()), true)[0]['friendRequests'];
+        $users = array_unique(explode("||", $users));
 
+        $requestsInfo = [];
+
+        foreach ($users as $user) {
+            $req = [];
+            $userInfo = json_decode(json_encode(DB::table('users')->where('email', 'LIKE',$user)->get()->toArray()), true)[0];
+            $req[0] = $userInfo['name'];
+            $req[1] = $userInfo['image'];
+            $req[2] = $userInfo['id'];
+            $requestsInfo[] = $req;
+        }
+
+        return view('friendRequests', ['requests' => $requestsInfo]);
     }
 
     public function acceptFriend()
     {
+        $email = Auth::user()->email;
+        $friendEmail = $_POST['email'];
+
+        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friends'];
+
+        if (is_null($userFriends)) {
+            $userFriends = $friendEmail;
+
+        } else {
+
+            $userFriends .= "||" . $friendEmail;
+        }
+
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('friendRequests' => $userFriends));
+
+        $friendReqs = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friendRequests'];
+        $friendReqs = explode("||", $friendReqs);
+
+        $friendReqs = array_diff($friendReqs, array($friendEmail));
+
+        $friendReqs = implode("||", $friendReqs);
+
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('friendRequests' => $friendReqs));
+
+        return view('friendRequests');
     }
 
     public function removeFriendRequests()
     {
-    }
 
+        $email = Auth::user()->email;
+        $friendEmail = $_POST['email'];
+
+        $friendReqs = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friendRequests'];
+        $friendReqs = explode("||", $friendReqs);
+
+        $friendReqs = array_diff($friendReqs, array($friendEmail));
+
+        $friendReqs = implode("||", $friendReqs);
+
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('friendRequests' => $friendReqs));
+
+        return view('friendRequests');
+    }
 }

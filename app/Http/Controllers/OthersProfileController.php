@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use \Datetime;
+use function PHPUnit\Framework\isEmpty;
 
 
 class OthersProfileController extends Controller
@@ -19,15 +20,15 @@ class OthersProfileController extends Controller
     public function create()
     {
 
-        $requestedEmail = json_decode(json_encode(DB::table('users')->where('id', 'LIKE', "%" . request()->id . "%")->get()->toArray()), true)[0]['email'];
+        $requestedEmail = json_decode(json_encode(DB::table('users')->where('id', 'LIKE', request()->id)->get()->toArray()), true)[0]['email'];
 
-        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . Auth::user()->email . "%")->get()->toArray()), true)[0]['friends'];
+        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', Auth::user()->email)->get()->toArray()), true)[0]['friends'];
 
         $userFriends = explode("||", $userFriends);
 
         $isFriend = in_array($requestedEmail, $userFriends);
 
-        $userInfo = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $requestedEmail . "%")->get()->toArray()), true);
+        $userInfo = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $requestedEmail)->get()->toArray()), true);
 
         $isPrivate = $userInfo[0]['private'];
 
@@ -36,7 +37,7 @@ class OthersProfileController extends Controller
 
         }
 
-        $posts = DB::table('profiles')->where('email', 'LIKE', "%" . $requestedEmail . "%")->orderBy('created_at', 'desc')->get()->toArray();
+        $posts = DB::table('profiles')->where('email', 'LIKE', $requestedEmail)->orderBy('created_at', 'desc')->get()->toArray();
 
         $postArr = [];
 
@@ -49,9 +50,9 @@ class OthersProfileController extends Controller
                 $commentsArr = [];
                 foreach ($comments as $c) {
                     $postComment = explode("||", $c);
-                    $commenterName = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $postComment[0] . "%")->first("name")), true)['name'];
+                    $commenterName = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $postComment[0])->first("name")), true)['name'];
 
-                    $profileImage = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $postComment[0] . "%")->first("image")), true)['image'];
+                    $profileImage = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $postComment[0])->first("image")), true)['image'];
 
                     $postComment[0] = $commenterName;
                     $postComment[3] = $profileImage;
@@ -69,7 +70,7 @@ class OthersProfileController extends Controller
         $email = Auth::user()->email;
         $requestedEmail = $_POST['accountEmail'];
 
-        $post = DB::table('profiles')->where('id', 'LIKE', "%" . $_POST['id'] . "%")->get();
+        $post = DB::table('profiles')->where('id', 'LIKE', $_POST['id'])->get();
 
         $comments = json_decode(json_encode($post), true)[0]['comments'];
 
@@ -84,10 +85,26 @@ class OthersProfileController extends Controller
             $comments = $comments . "|||" . $content;
         }
 
-        DB::table('profiles')->where('id', 'LIKE', "%" . $_POST['id'] . "%")->update(array('comments' => $comments));
+        DB::table('profiles')->where('id', 'LIKE', $_POST['id'])->update(array('comments' => $comments));
 
-        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $requestedEmail . "%")->get()->toArray()), true)[0]['id'];
+        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $requestedEmail)->get()->toArray()), true)[0]['id'];
 
         return redirect('/profile?id='. $userId);
+    }
+
+    public function search(){
+        $matchingUsers = json_decode(json_encode(DB::table('users')->where('name', 'LIKE', "%" . $_POST['search'] . "%")->get()->toArray()), true);
+
+        $usersInfo = [];
+
+        foreach ($matchingUsers as $user) {
+            $req = [];
+            $req[0] = $user['name'];
+            $req[1] = $user['image'];
+            $req[2] = $user['id'];
+            $requestsInfo[] = $req;
+        }
+
+        return view('searchResults', ['users' => $requestsInfo]);
     }
 }
