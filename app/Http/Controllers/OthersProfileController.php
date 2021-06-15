@@ -31,8 +31,8 @@ class OthersProfileController extends Controller
 
         $isPrivate = $userInfo[0]['private'];
 
-        if ($isPrivate) {
-            return view('othersProfile', ["info" => $userInfo[0], "isFriend" => $isFriend, "private" => true]);
+        if ($isPrivate and !$isFriend) {
+            return view('othersProfile', ["info" => $userInfo[0], "isFriend" => false, "private" => true]);
 
         }
 
@@ -87,7 +87,6 @@ class OthersProfileController extends Controller
         DB::table('profiles')->where('id', 'LIKE', "%" . $_POST['id'] . "%")->update(array('comments' => $comments));
 
         $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', "%" . $requestedEmail . "%")->get()->toArray()), true)[0]['id'];
-
 
         return redirect('/profile?id='. $userId);
     }

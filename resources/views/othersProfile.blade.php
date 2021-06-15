@@ -12,21 +12,32 @@
         <div class="text-center h4" style="margin-top: -4.8cm; margin-left: -300px"> {{$info['name']}} </div>
 
         <div class="text-center h4" style="margin-top: .7cm; margin-left: -40px">
-            <form method="get" action="{{url('/')}}" enctype="multipart/form-data"
-                  style="margin-top: -1.55cm; margin-left: -180px">
-                @csrf
-                <button
-                    style="width: 90px; height: 27px; margin-left: 280px; background-color: dodgerblue; font-size: x-small; color: white; border-radius: 8px; position: relative; z-index: 2"
-                    type="submit">
-                    @if($isFriend)
+            @if($isFriend)
+                <form method="post" action="{{url('/removeFriend')}}" enctype="multipart/form-data"
+                      style="margin-top: -1.55cm; margin-left: -180px">
+                    @csrf
+                    <input type="hidden" name="email" value="{{$info['email']}}">
+                    <button
+                        style="width: 70px; height: 27px; margin-left: 280px; background-color: darkred; font-size: x-small; color: white; border-radius: 8px; position: relative; z-index: 2"
+                        type="submit">
                         Remove
                         <input type="hidden" name="isFriend" value="remove">
-                    @else
+                    </button>
+                </form>
+            @else
+                <form method="post" action="{{url('/addFriend')}}" enctype="multipart/form-data"
+                      style="margin-top: -1.55cm; margin-left: -180px">
+                    @csrf
+                    <input type="hidden" name="email" value="{{$info['email']}}">
+                    <button
+                        style="width: 70px; height: 27px; margin-left: 280px; background-color: dodgerblue; font-size: x-small; color: white; border-radius: 8px; position: relative; z-index: 2"
+                        type="submit">
                         Add
                         <input type="hidden" name="isFriend" value="add">
-                    @endif
-                </button>
-            </form>
+                    </button>
+                </form>
+            @endif
+
         </div>
 
         <div class="text-center h4" style="margin-top: .7cm; margin-left: -190px">
@@ -51,7 +62,7 @@
                         </div>
                     </div>
                 @else
-                @isset($data)
+                    @isset($data)
 
                         @foreach($data as $p)
 

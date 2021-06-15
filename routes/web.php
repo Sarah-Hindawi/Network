@@ -28,6 +28,9 @@ Route::get('/profileimg', [App\Http\Controllers\UpdateProfileController::class, 
 Route::post('/profileimg', [App\Http\Controllers\UpdateProfileController::class, 'storeProfileImg']);
 
 Route::get('/friends', [App\Http\Controllers\FriendsController::class, 'create']);
+Route::post('/addFriend', [App\Http\Controllers\FriendsController::class, 'addFriend']);
+Route::post('/removeFriend', [App\Http\Controllers\FriendsController::class, 'removeFriend']);
+
 
 Route::get('/profile', [App\Http\Controllers\OthersProfileController::class, 'create']);
 Route::post('/addcomment', [App\Http\Controllers\OthersProfileController::class, 'addComment']);
