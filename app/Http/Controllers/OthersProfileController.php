@@ -22,19 +22,14 @@ class OthersProfileController extends Controller
 
         $requestedEmail = json_decode(json_encode(DB::table('users')->where('id', 'LIKE', request()->id)->get()->toArray()), true)[0]['email'];
 
-        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', Auth::user()->email)->get()->toArray()), true)[0]['friends'];
-
-        $userFriends = explode("||", $userFriends);
-
-        $isFriend = in_array($requestedEmail, $userFriends);
-
         $userInfo = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $requestedEmail)->get()->toArray()), true);
 
         $isPrivate = $userInfo[0]['private'];
 
-        if ($isPrivate and !$isFriend) {
-            return view('othersProfile', ["info" => $userInfo[0], "isFriend" => false, "private" => true]);
+        $friend = $this->isFriend($requestedEmail);
 
+        if ($isPrivate and $friend != "true") {
+            return view('othersProfile', ["info" => $userInfo[0], "isFriend" => "false", "private" => true]);
         }
 
         $posts = DB::table('profiles')->where('email', 'LIKE', $requestedEmail)->orderBy('created_at', 'desc')->get()->toArray();
@@ -62,7 +57,32 @@ class OthersProfileController extends Controller
             }
         }
 
-        return view('othersProfile', ["data" => $postArr, "info" => $userInfo[0], "isFriend" => $isFriend]);
+        return view('othersProfile', ["data" => $postArr, "info" => $userInfo[0], "isFriend" => $friend]);
+    }
+
+    public function isFriend($requestedEmail): string
+    {
+        $email = Auth::user()->email;
+        $userFriends = explode("||", json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friends']);
+        //if the logged in user has already send a request to the other user
+        $userRequests = explode("||", json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $requestedEmail)->get()->toArray()), true)[0]['friendRequests']);
+        //if the logged in user has a friend requested from the other user
+        $loggedInUserReqs = explode("||", json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friendRequests']);
+
+        $friend = in_array($requestedEmail, $userFriends);
+        $requested = in_array($email, $userRequests);
+        $accept = in_array($requestedEmail, $loggedInUserReqs);
+
+        if (!$friend and !$requested and !$accept) {
+            return "false";
+        } elseif ($friend) {
+            return "true";
+        } else if($requested) {
+            return "requested";
+        }
+        else{
+            return "accept";
+        }
     }
 
     public function addComment()
@@ -89,10 +109,11 @@ class OthersProfileController extends Controller
 
         $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $requestedEmail)->get()->toArray()), true)[0]['id'];
 
-        return redirect('/profile?id='. $userId);
+        return redirect('/profile?id=' . $userId);
     }
 
-    public function search(){
+    public function search()
+    {
         $matchingUsers = json_decode(json_encode(DB::table('users')->where('name', 'LIKE', "%" . $_POST['search'] . "%")->get()->toArray()), true);
 
         $usersInfo = [];

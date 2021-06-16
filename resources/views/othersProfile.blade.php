@@ -12,7 +12,7 @@
         <div class="text-center h4" style="margin-top: -4.8cm; margin-left: -300px"> {{$info['name']}} </div>
 
         <div class="text-center h4" style="margin-top: .7cm; margin-left: -40px">
-            @if($isFriend)
+            @if($isFriend =="true")
                 <form method="post" action="{{url('/removeFriend')}}" enctype="multipart/form-data"
                       style="margin-top: -1.55cm; margin-left: -180px">
                     @csrf
@@ -24,7 +24,7 @@
                         <input type="hidden" name="isFriend" value="remove">
                     </button>
                 </form>
-            @else
+            @elseif($isFriend=="false")
                 <form method="post" action="{{url('/addFriend')}}" enctype="multipart/form-data"
                       style="margin-top: -1.55cm; margin-left: -180px">
                     @csrf
@@ -34,6 +34,30 @@
                         type="submit">
                         Add
                         <input type="hidden" name="isFriend" value="add">
+                    </button>
+                </form>
+            @elseif($isFriend=="requested")
+                <form method="post" action="{{url('/cancelRequest')}}" enctype="multipart/form-data"
+                      style="margin-top: -1.55cm; margin-left: -180px">
+                    @csrf
+                    <input type="hidden" name="email" value="{{$info['email']}}">
+                    <button
+                        style="width: 70px; height: 27px; margin-left: 280px; background-color: gray; font-size: x-small; color: white; border-radius: 8px; position: relative; z-index: 2"
+                        type="submit">
+                        Cancel
+                        <input type="hidden" name="isFriend" value="cancel">
+                    </button>
+                </form>
+            @else
+                <form method="post" action="{{url('/acceptFriend')}}" enctype="multipart/form-data"
+                      style="margin-top: -1.55cm; margin-left: -180px">
+                    @csrf
+                    <input type="hidden" name="email" value="{{$info['email']}}">
+                    <button
+                        style="width: 70px; height: 27px; margin-left: 280px; background-color: dodgerblue; font-size: x-small; color: white; border-radius: 8px; position: relative; z-index: 2"
+                        type="submit">
+                        Accept
+                        <input type="hidden" name="isFriend" value="accept">
                     </button>
                 </form>
             @endif

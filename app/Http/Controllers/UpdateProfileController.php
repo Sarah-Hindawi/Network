@@ -10,11 +10,19 @@ use \Datetime;
 
 class UpdateProfileController extends Controller
 {
-    public function createProfileImg(){
+    public function create()
+    {
+        return view('settings', ["email" => Auth::user()->email]);
+
+    }
+
+    public function createProfileImg()
+    {
         return view('profileImage');
     }
 
-    public function storeProfileImg(Request $request){
+    public function storeProfileImg(Request $request)
+    {
 
         $email = Auth::user()->email;
 
@@ -34,29 +42,33 @@ class UpdateProfileController extends Controller
         return view('home');
     }
 
-    public function updateAbout(){
+    public function updateSettings(Request $request)
+    {
 
         $email = Auth::user()->email;
 
-        DB::table('users')->where('email', 'LIKE', $email)->update(array('about' => $_POST['about']));
+        if (isset($request->about)) {
+            DB::table('users')->where('email', 'LIKE', $email)->update(array('about' => $_POST['about']));
+        }
 
-        return view('home');
+        if (isset($request->privacy)) {
+            DB::table('users')->where('email', 'LIKE', $email)->update(array('private' => true));
+        }
+
+        if (isset($request->name)) {
+            DB::table('users')->where('email', 'LIKE', $email)->update(array('name' => $_POST['name']));
+        }
+
+        if (isset($request->password)) {
+            DB::table('users')->where('email', 'LIKE', $email)->update(array('password' => $_POST['password']));
+        }
+        return redirect('/home');
     }
 
-    public function updatePrivacy(){
 
-        $email = Auth::user()->email;
-        DB::table('users')->where('email', 'LIKE', $email)->update(array('private' => $_POST['privacy']));
-        return view('home');
+    public function deleteAccount()
+    {
     }
-
-    public function updateUserName(){
-
-        $email = Auth::user()->email;
-        DB::table('users')->where('email', 'LIKE', $email)->update(array('name' => $_POST['name']));
-        return view('home');
-    }
-
 
 
 }

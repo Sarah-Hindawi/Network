@@ -20,7 +20,7 @@
         <div class="text-center h4" style="margin-top: -4.8cm; margin-left: -300px"> {{Auth::user()->name}} </div>
 
         <div class="text-center h4" style="margin-top: -0.9cm; margin-left: -270px;">
-            <form method="get" action="{{url('/')}}" enctype="multipart/form-data" style="margin-top: -25px">
+            <form method="get" action="{{url('/settings')}}" enctype="multipart/form-data" style="margin-top: -25px">
                 @csrf
                 <input type="image" name="imgbtn"
                        style="width: 22px; height: 22px; margin-left: 190px; background-color: white; position: relative; z-index: 1"
@@ -48,10 +48,10 @@
             </form>
         </div>
 
-        <div class="text-center h4" style="margin-top: .7cm; margin-left: -190px">
+        <div class="text-center h4" style="margin-top: .7cm; margin-left: -180px">
 
-            @isset($about)
-                <p style="text-align:center; margin-top: 20px; margin-left:-54px; font-size: medium">{{$about }}</p>
+            @isset(Auth::user()->about)
+                <p style="text-align:center; margin-top: 20px; margin-left:-54px; font-size: medium">{{Auth::user()->about }}</p>
             @endisset
         </div>
     </div>
