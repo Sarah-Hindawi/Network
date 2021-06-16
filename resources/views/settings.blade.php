@@ -35,7 +35,7 @@
                                        class="col-md-4 col-form-label text-md-right">{{ __('About') }}</label>
 
                                 <div class="col-md-6">
-                                    <textarea class="form-control" name="about"></textarea>
+                                    <textarea class="form-control" name="about">{{$about}}</textarea>
                                 </div>
                             </div>
 
@@ -43,23 +43,23 @@
                                 <label for="privacy"
                                        class="col-md-4 col-form-label text-md-right">{{ __('Private') }}</label>
                                 <div class="col-md-6">
-                                    <input type="checkbox" id="privacy" name="privacy" value="true" style=" width:20px; height:20px; margin-top: 8px">
+                                    <input type="checkbox" id="privacy" name="privacy" value="true"
+                                           style=" width:20px; height:20px; margin-top: 8px" {{$privacy}}>
                                 </div>
                             </div>
 
 
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-success" style="width: 3cm; height: 1cm; margin-left: 8.5cm">Update</button>
+                                <button type="submit" class="btn btn-success"
+                                        style="width: 3cm; height: 1cm; margin-left: 8.5cm">Update
+                                </button>
                             </div>
                         </form>
 
-                        <form method="post" action="{{url('/deleteAccount')}}" enctype="multipart/form-data"
-                              style="margin-top: -1.55cm; margin-left: -180px">
-                            @csrf
-                            <input type="hidden" name="email" value="{{$email}}">
-                            <button style="width: 150px; height: 40px; margin-left: 497px; margin-top: 1.9cm; background-color: red; font-size: medium; color: white; border-radius: 8px; position: relative; z-index: 2" type="submit">
-                                Delete Account </button>
-                        </form>
+                        <a class="btn btn-danger" style="margin-left: 330px; margin-top: 10px"
+                           onclick="return confirm('Are you sure you want to delete your account?')"
+                           href="{{url('/deleteAccount')}}">Delete Account</a>
+
                     </div>
                 </div>
             </div>

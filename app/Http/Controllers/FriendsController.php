@@ -8,6 +8,11 @@ use DB;
 
 class FriendsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function create()
     {
         $email = Auth::user()->email;
@@ -145,7 +150,7 @@ class FriendsController extends Controller
         }
         DB::table('users')->where('email', 'LIKE', $friendEmail)->update(array('friends' => $userFriends));
 
-        if($_POST['isFriend']=='accept'){
+        if(isset($_POST['isFriend'])){
         $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['id'];
         return redirect('/profile?id=' . $userId);
     }

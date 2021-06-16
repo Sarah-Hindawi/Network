@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect('/home');
+    if (Auth::check()) {
+        return redirect('/home');
+    }
+    return view('welcome');
 });
 
 Auth::routes();
@@ -28,18 +31,17 @@ Route::get('/profileimg', [App\Http\Controllers\UpdateProfileController::class, 
 Route::post('/profileimg', [App\Http\Controllers\UpdateProfileController::class, 'storeProfileImg']);
 Route::get('/settings', [App\Http\Controllers\UpdateProfileController::class, 'create']);
 Route::post('/updateSettings', [App\Http\Controllers\UpdateProfileController::class, 'updateSettings']);
-Route::post('/deleteAccount', [App\Http\Controllers\UpdateProfileController::class, 'deleteAccount']);
+Route::get('/deleteAccount', [App\Http\Controllers\UpdateProfileController::class, 'deleteAccount']);
 
 
 Route::get('/friends', [App\Http\Controllers\FriendsController::class, 'create']);
 Route::post('/addFriend', [App\Http\Controllers\FriendsController::class, 'addFriend']);
 Route::post('/removeFriend', [App\Http\Controllers\FriendsController::class, 'removeFriend']);
-Route::get ('/requests', [App\Http\Controllers\FriendsController::class, 'displayFriendRequests']);
+Route::get('/requests', [App\Http\Controllers\FriendsController::class, 'displayFriendRequests']);
 Route::post('/addFriend', [App\Http\Controllers\FriendsController::class, 'addFriend']);
 Route::post('/acceptFriend', [App\Http\Controllers\FriendsController::class, 'acceptFriend']);
 Route::post('/removeRequest', [App\Http\Controllers\FriendsController::class, 'removeRequest']);
 Route::post('/cancelRequest', [App\Http\Controllers\FriendsController::class, 'cancelRequest']);
-
 
 
 Route::get('/profile', [App\Http\Controllers\OthersProfileController::class, 'create']);

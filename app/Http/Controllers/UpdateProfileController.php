@@ -6,13 +6,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use \Datetime;
+use Illuminate\Support\Facades\Hash;
 
 
 class UpdateProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function create()
     {
-        return view('settings', ["email" => Auth::user()->email]);
+        $privacy = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', Auth::user()->email)->get()->toArray()), true)[0]['private'];
+        if ($privacy) {
+            $privacy = "checked";
+        }
+        else{
+            $privacy = "";
+        }
+
+        $about = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', Auth::user()->email)->get()->toArray()), true)[0]['about'];
+
+        return view('settings', ["email" => Auth::user()->email, "privacy" => $privacy, "about" => $about]);
 
     }
 
@@ -53,6 +69,9 @@ class UpdateProfileController extends Controller
 
         if (isset($request->privacy)) {
             DB::table('users')->where('email', 'LIKE', $email)->update(array('private' => true));
+        } else {
+            DB::table('users')->where('email', 'LIKE', $email)->update(array('private' => false));
+
         }
 
         if (isset($request->name)) {
@@ -60,7 +79,7 @@ class UpdateProfileController extends Controller
         }
 
         if (isset($request->password)) {
-            DB::table('users')->where('email', 'LIKE', $email)->update(array('password' => $_POST['password']));
+            DB::table('users')->where('email', 'LIKE', $email)->update(array('password' => Hash::make($_POST['password'])));
         }
         return redirect('/home');
     }
@@ -68,6 +87,8 @@ class UpdateProfileController extends Controller
 
     public function deleteAccount()
     {
+        DB::table('users')->where('email', 'LIKE', Auth::user()->email)->delete();
+        return view('welcome');
     }
 
 

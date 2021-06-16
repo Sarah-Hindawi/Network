@@ -48,10 +48,10 @@
             </form>
         </div>
 
-        <div class="text-center h4" style="margin-top: .7cm; margin-left: -180px">
+        <div class="text-center h4" style=" position: absolute; margin-top: .7cm; margin-left: 360px">
 
             @isset(Auth::user()->about)
-                <p style="text-align:center; margin-top: 20px; margin-left:-54px; font-size: medium">{{Auth::user()->about }}</p>
+                <p style="font-size: medium">{{Auth::user()->about }}</p>
             @endisset
         </div>
     </div>

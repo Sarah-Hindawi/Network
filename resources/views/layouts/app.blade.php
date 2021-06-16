@@ -47,11 +47,13 @@
 
                     </form>
 
+                    @if (Auth::check())
                     <form method="get" action="{{url('/requests')}}">
                         @csrf
                         <input type="image" name="imgbtn" style="margin-left:240px; margin-right: -520px; width: 30px; height: 30px"
                                src="{{asset('assets/images/requests.png')}}"  alt="Tool Tip">
                     </form>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
