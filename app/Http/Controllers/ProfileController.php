@@ -71,7 +71,13 @@ class ProfileController extends Controller
 
         DB::table('profiles')->where('id', 'LIKE', $_POST['id'])->update(array('comments' => $comments));
 
-
         return redirect('/home');
+    }
+
+    public function deletePost()
+    {
+        DB::table('profiles')->where('id', 'LIKE', $_POST['id'])->delete();
+        return redirect('/home');
+
     }
 }

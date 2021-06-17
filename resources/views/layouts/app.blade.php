@@ -53,6 +53,12 @@
                         <input type="image" name="imgbtn" style="margin-left:240px; margin-right: -520px; width: 30px; height: 30px"
                                src="{{asset('assets/images/requests.png')}}"  alt="Tool Tip">
                     </form>
+
+                        <form method="get" action="{{url('/newsfeed')}}">
+                            @csrf
+                            <input type="image" name="imgbtn" style="margin-left:213px; margin-right: -520px; width: 20px; height: 20px"
+                                   src="{{asset('assets/images/NewsFeed.png')}}"  alt="Tool Tip">
+                        </form>
                     @endif
 
                     <!-- Right Side Of Navbar -->
@@ -85,6 +91,16 @@
                                     </a>
 
                                     <form id="profile-form" action="{{url('/home')}}" method="get" class="d-none">
+                                        @csrf
+                                    </form>
+
+                                    <a class="dropdown-item" href="{{url('/newsfeed')}}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('newsfeed-form').submit();">
+                                        {{ __('Newsfeed') }}
+                                    </a>
+
+                                    <form id="newsfeed-form" action="{{url('/newsfeed')}}" method="get" class="d-none">
                                         @csrf
                                     </form>
 

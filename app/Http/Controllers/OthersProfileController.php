@@ -77,10 +77,9 @@ class OthersProfileController extends Controller
             return "false";
         } elseif ($friend) {
             return "true";
-        } else if($requested) {
+        } else if ($requested) {
             return "requested";
-        }
-        else{
+        } else {
             return "accept";
         }
     }
@@ -107,16 +106,17 @@ class OthersProfileController extends Controller
 
         DB::table('profiles')->where('id', 'LIKE', $_POST['id'])->update(array('comments' => $comments));
 
-        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $requestedEmail)->get()->toArray()), true)[0]['id'];
+        if (isset($_POST['source'])) {
+            return redirect('/requests');
+            $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $requestedEmail)->get()->toArray()), true)[0]['id'];
+        }
 
-        return redirect('/profile?id=' . $userId);
+        return redirect('/newsfeed');
     }
 
     public function search()
     {
         $matchingUsers = json_decode(json_encode(DB::table('users')->where('name', 'LIKE', "%" . $_POST['search'] . "%")->get()->toArray()), true);
-
-        $usersInfo = [];
 
         foreach ($matchingUsers as $user) {
             $req = [];

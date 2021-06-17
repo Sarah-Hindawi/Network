@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use Ramsey\Collection\Exception\NoSuchElementException;
 
 class FriendsController extends Controller
 {
@@ -83,7 +84,7 @@ class FriendsController extends Controller
 
         DB::table('users')->where('email', 'LIKE', $friendEmail)->update(array('friends' => $userFriends));
 
-        if(isset($_POST['isFriend'])){
+        if (isset($_POST['isFriend'])) {
             $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['id'];
             return redirect('/profile?id=' . $userId);
         }
@@ -94,12 +95,19 @@ class FriendsController extends Controller
     {
         $email = Auth::user()->email;
 
+        $allUsers = json_decode(json_encode(DB::table('users')->get(['email'])), true);
+        $allEmails = [];
+        foreach ($allUsers as $all){
+            $allEmails[] = $all['email'];
+        }
+
         $users = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friendRequests'];
 
         $requestsInfo = [];
 
         if (!is_null($users) and $users != "") {
-            $users = array_unique(explode("||", $users));
+            //intersection to avoid displaying requests from deleted accounts
+            $users = array_intersect(array_unique(explode("||", $users)), $allEmails);
 
             foreach ($users as $user) {
                 $req = [];
@@ -109,6 +117,7 @@ class FriendsController extends Controller
                 $req[2] = $userInfo['id'];
                 $req[3] = $userInfo['email'];
                 $requestsInfo[] = $req;
+
             }
         }
 
@@ -150,10 +159,10 @@ class FriendsController extends Controller
         }
         DB::table('users')->where('email', 'LIKE', $friendEmail)->update(array('friends' => $userFriends));
 
-        if(isset($_POST['isFriend'])){
-        $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['id'];
-        return redirect('/profile?id=' . $userId);
-    }
+        if (isset($_POST['isFriend'])) {
+            $userId = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['id'];
+            return redirect('/profile?id=' . $userId);
+        }
         return redirect('/requests');
     }
 

@@ -26,6 +26,7 @@ Route::post('/newpost', [App\Http\Controllers\AddController::class, 'store']);
 
 Route::get('/home', [App\Http\Controllers\ProfileController::class, 'create']);
 Route::post('/comment', [App\Http\Controllers\ProfileController::class, 'addComment']);
+Route::post('/deletePost', [App\Http\Controllers\ProfileController::class, 'deletePost']);
 
 Route::get('/profileimg', [App\Http\Controllers\UpdateProfileController::class, 'createProfileImg']);
 Route::post('/profileimg', [App\Http\Controllers\UpdateProfileController::class, 'storeProfileImg']);
@@ -48,3 +49,4 @@ Route::get('/profile', [App\Http\Controllers\OthersProfileController::class, 'cr
 Route::post('/addcomment', [App\Http\Controllers\OthersProfileController::class, 'addComment']);
 Route::post('/search', [App\Http\Controllers\OthersProfileController::class, 'search']);
 
+Route::get('/newsfeed', [App\Http\Controllers\HomeController::class, 'index']);

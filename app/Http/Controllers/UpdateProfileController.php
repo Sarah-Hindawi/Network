@@ -87,9 +87,44 @@ class UpdateProfileController extends Controller
 
     public function deleteAccount()
     {
-        DB::table('users')->where('email', 'LIKE', Auth::user()->email)->delete();
+        $email = Auth::user()->email;
+
+        $friends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friends'];
+
+        if (!is_null($friends) and $friends != "") {
+            $friends = array_unique(explode("||", $friends));
+
+            foreach ($friends as $user) {
+                $this->removeFriends($email, $user);
+            }
+        }
+
+        DB::table('profiles')->where('email', 'LIKE', $email )->delete();
+        DB::table('users')->where('email', 'LIKE', $email)->delete();
+
+        Auth::logout();
         return view('welcome');
     }
 
+    public function removeFriends($email, $friendEmail){
 
+        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $email)->get()->toArray()), true)[0]['friends'];
+        $userFriends = explode("||", $userFriends);
+
+        //remove the email address of the removed user from the list of friends
+        $userFriends = array_diff($userFriends, array($friendEmail));
+
+        $userFriends = implode("||", $userFriends);
+
+        DB::table('users')->where('email', 'LIKE', $email)->update(array('friends' => $userFriends));
+
+
+        //removing friend from the other end
+        $userFriends = json_decode(json_encode(DB::table('users')->where('email', 'LIKE', $friendEmail)->get()->toArray()), true)[0]['friends'];
+        $userFriends = explode("||", $userFriends);
+        $userFriends = array_diff($userFriends, array($email));
+        $userFriends = implode("||", $userFriends);
+
+        DB::table('users')->where('email', 'LIKE', $friendEmail)->update(array('friends' => $userFriends));
+    }
 }

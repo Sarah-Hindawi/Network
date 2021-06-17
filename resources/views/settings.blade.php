@@ -56,9 +56,10 @@
                             </div>
                         </form>
 
-                        <a class="btn btn-danger" style="margin-left: 330px; margin-top: 10px"
-                           onclick="return confirm('Are you sure you want to delete your account?')"
-                           href="{{url('/deleteAccount')}}">Delete Account</a>
+                        <hr>
+                        <p style="color: red; font-size: medium">Delete Account</p>
+                        <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account?')"
+                           href="{{url('/deleteAccount')}}">Delete</a>
 
                     </div>
                 </div>

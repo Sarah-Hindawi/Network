@@ -76,6 +76,14 @@
                                     {{$p['created_at']}}
                                 </p>
 
+                                <form method="post" action="{{url('/deletePost')}}" enctype="multipart/form-data" style="margin-left: 675px;  margin-top:-1.5cm">
+                                    @csrf
+                                    <input type="image" name="imgbtn"
+                                           style="width: 20px; height: 20px; background-color: white; border-radius: 3px;"
+                                           src="{{asset('assets/images/remove.png')}}">
+                                    <input type="hidden" name="id" value="{{$p['id']}}">
+                                </form>
+
                             </div>
 
                             <div class="card-body">
